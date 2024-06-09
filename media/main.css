@@ -1,0 +1,54 @@
+.accordion {
+  cursor: pointer;
+  padding: 4px;
+  width: 100%;
+  border: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  outline: none;
+  font-size: 15px;
+  transition: 0.4s;
+  background-color: var(--vscode-background);
+  color: var(--vscode-editor-foreground);
+}
+
+.accordion .left-text {
+  text-align: left;
+}
+
+.accordion .right-text {
+  text-align: right;
+  margin-left: auto; /* Ensures the right text is pushed to the right */
+}
+
+.active, .accordion:hover {
+  background-color: var(--vscode-button-hoverBackground);
+}
+
+.accordion:after {
+  content: '\002B';
+  color: var(--vscode-button-foreground);
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: "\2212";
+}
+
+.panel {
+  padding: 0 4px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+}
+
+.passed{
+  color: #0F0;
+}
+
+.failed{
+  color: #F00;
+}

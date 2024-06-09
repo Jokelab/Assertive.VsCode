@@ -1,0 +1,161 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "Assertive",
+	"patterns": [
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#strings"
+		},
+		{
+			"include": "#variables"
+		},
+		{
+			"include": "#functions"
+		},
+		{
+			"include": "#constants"
+		},
+		{
+			"include": "#comment-block"
+		},
+		{
+			"include": "#line-comment"
+		}
+	],
+	"repository": {
+		"keywords": {
+			"patterns": [
+				{
+					"name": "keyword.control.assertive",
+					"match": "\\b(assert|else|if|while|loop|from|to|parallel|each|return|break|def|each|in|headers|query|body)\\b"
+				},
+				{
+					"name": "keyword.operator.assertive",
+					"match": "\\b(and|or|not|<=|>=|<|>|!=|=|\\+|-)\\b"
+				},
+				{
+					"match": "\\b(true|false)\\b",
+					"name": "keyword.booleans.assertive"
+				},
+				{
+					"match": "\\b(GET|POST|PUT|DELETE|PATCH|OPTIONS|HEAD|TRACE|CONNECT)\\b",
+					"name": "keyword.httpmethods.assertive"
+				}
+			]
+		},
+		"strings": {
+			"name": "string.quoted.double.assertive",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.assertive",
+					"match": "\\\\."
+				},
+				{
+					"include": "#interpolation"
+				}
+			]
+		},
+		"interpolation": {
+			"name": "meta.interpolation.assertive",
+			"begin": "\\{\\{",
+			"end": "\\}\\}",
+			"patterns": [
+				{
+					"include": "#expression"
+				}
+			]
+		},
+		"expression": {
+			"name": "expression.assertive",
+			"patterns": [
+				{
+					"include": "#keywords"
+				},
+				{
+					"include": "#variables"
+				},
+				{
+					"include": "#functions"
+				},
+				{
+					"name": "constant.numeric.assertive",
+					"match": "\\b\\d+\\b"
+				},
+				{
+					"name": "keyword.operator.assertive",
+					"match": "\\b(and|or|not|<=|>=|<|>|!=|=|\\+|-)\\b"
+				},
+				{
+					"include": "#strings"
+				}
+			]
+		},
+		"variables": {
+			"name": "variable.dollar-sign.assertive",
+			"patterns": [
+				{
+					"match": "\\$[a-zA-Z_][a-zA-Z0-9_]*",
+					"name": "variable.dollar-sign.assertive"
+				}
+			]
+		},
+		"functions": {
+			"name": "function.name.assertive",
+			"patterns": [
+				{
+					"name": "function-name",
+					"match": "\\b[A-Za-z_][A-Za-z0-9_]*\\(?.*?\\)?",
+					"captures": {
+						"0": {
+							"name": "entity.name.function"
+						}
+					}
+				}
+			]
+		},
+		"constants": {
+			"name": "constant.assertive",
+			"patterns": [
+				{
+					"match": "\\b(true|false|GET|POST|PUT|DELETE|PATCH|OPTIONS|HEAD|TRACE|CONNECT)\\b",
+					"name": "constant.assertive"
+				}
+			]
+		},
+		"comment-block": {
+			"begin": "/\\*",
+			"beginCaptures": {
+				"0": {
+					"name": "punctuation.definition.comment.begin.assertive"
+				}
+			},
+			"end": "\\*/",
+			"endCaptures": {
+				"0": {
+					"name": "punctuation.definition.comment.end.assertive"
+				}
+			},
+			"name": "comment.block.assertive"
+		},
+		"line-comment": {
+			"patterns": [
+				{
+					"begin": "\\s*+(\\/\\/)",
+					"end": "(?<=\\n)(?<!\\\\\\n)",
+					"beginCaptures": {
+						"1": {
+							"name": "punctuation.definition.comment.assertive"
+						}
+					},
+					"endCaptures": {},
+					"name": "comment.line.double-slash.assertive"
+				}
+			]
+		}
+	},
+	"scopeName": "source.assertive"
+}
