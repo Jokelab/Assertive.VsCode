@@ -71,7 +71,7 @@ export function activate(context: vscode.ExtensionContext) {
         });
 
         ws.on('close', () => {
-            console.log('Disconnected from WebSocket server');
+            console.log('Disconnected from Assertive WebSocket server');
         });
     });
 
