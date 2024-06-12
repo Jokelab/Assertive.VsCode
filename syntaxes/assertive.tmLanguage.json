@@ -29,7 +29,7 @@
 			"patterns": [
 				{
 					"name": "keyword.control.assertive",
-					"match": "\\b(assert|else|if|while|loop|from|to|parallel|each|return|break|def|each|in|headers|query|body)\\b"
+					"match": "\\b(assert|else|if|while|loop|from|to|parallel|each|return|break|continue;def|each|in|headers|query|body|string|formurlencoded|formdata|stream)\\b"
 				},
 				{
 					"name": "keyword.operator.assertive",
