@@ -29,9 +29,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deactivate = exports.activate = void 0;
 const vscode = __importStar(require("vscode"));
 const ws_1 = __importDefault(require("ws"));
+const node_1 = require("vscode-languageclient/node");
+let client;
 function activate(context) {
     let panel;
     vscode.window.showInformationMessage(`Activating Assertive extension`);
+    const serverExecutable = 'dotnet'; // assumes `dotnet` is in PATH
+    const serverPath = 'C:\\dev\\private\\Assertive\\Assertive.LanguageServer\\bin\\Debug\\net8.0\\Assertive.LanguageServer.dll'; //context.asAbsolutePath(path.join('server', 'bin', 'Debug', 'net6.0', 'LspServer.dll'));
+    // Server options
+    const serverOptions = {
+        run: { command: serverExecutable, args: [serverPath] },
+        debug: { command: serverExecutable, args: [serverPath] }
+    };
+    // Client options
+    const clientOptions = {
+        documentSelector: [{ scheme: 'file', language: 'assertive' }]
+    };
+    // Create the language client and start the client.
+    client = new node_1.LanguageClient('AssertiveLSP', 'Assertive Language Server', serverOptions, clientOptions);
+    // Start the client. This will also launch the server
+    client.start();
     //start the dotnet websockets server
     // const assemblyPath = "C:\\dev\\private\\Assertive\\Assertive.Server\\bin\\Release\\net8.0\\publish\\Assertive.Server.dll";
     // const cwd = "C:\\dev\\private\\Assertive\\Assertive.Server\\bin\\Release\\net8.0\\publish";
@@ -81,7 +98,7 @@ function activate(context) {
             }
         });
         ws.on('close', () => {
-            console.log('Disconnected from WebSocket server');
+            console.log('Disconnected from Assertive WebSocket server');
         });
     });
     context.subscriptions.push(disposable);

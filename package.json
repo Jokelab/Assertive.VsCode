@@ -46,12 +46,11 @@
     ],
     "keybindings": [
       {
-          "command": "extension.runAssertive",
-          "key": "ctrl+alt+a",
-          "mac": "shift+cmd+a"
+        "command": "extension.runAssertive",
+        "key": "ctrl+alt+a",
+        "mac": "shift+cmd+a"
       }
-  ]
-
+    ]
   },
   "devDependencies": {
     "@types/node": "^12.11.7",
@@ -62,6 +61,7 @@
     "ws": "^8.0.0"
   },
   "dependencies": {
-    "ws": "^8.0.0"
+    "ws": "^8.0.0",
+       "vscode-languageclient": "^8.0.2"
   }
 }

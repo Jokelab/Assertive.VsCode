@@ -1,12 +1,45 @@
 import * as vscode from 'vscode';
 import WebSocket from 'ws';
+import * as path from 'path';
+import {
+    LanguageClient,
+    LanguageClientOptions,
+    ServerOptions
+} from 'vscode-languageclient/node';
 import { exec } from 'child_process';
+
+let client: LanguageClient;
 
 export function activate(context: vscode.ExtensionContext) {
     let panel: vscode.WebviewPanel | undefined;
 
     vscode.window.showInformationMessage(`Activating Assertive extension`);
 
+    const serverExecutable = 'dotnet'; // assumes `dotnet` is in PATH
+    const serverPath = 'C:\\dev\\private\\Assertive\\Assertive.LanguageServer\\bin\\Debug\\net8.0\\Assertive.LanguageServer.dll';//context.asAbsolutePath(path.join('server', 'bin', 'Debug', 'net6.0', 'LspServer.dll'));
+
+    // Server options
+    const serverOptions: ServerOptions = {
+        run: { command: serverExecutable, args: [serverPath] },
+        debug: { command: serverExecutable, args: [serverPath] }
+    };
+
+    // Client options
+    const clientOptions: LanguageClientOptions = {
+        documentSelector: [{ scheme: 'file', language: 'assertive' }]
+    };
+
+    // Create the language client and start the client.
+    client = new LanguageClient(
+        'AssertiveLSP',
+        'Assertive Language Server',
+        serverOptions,
+        clientOptions
+    );
+
+    // Start the client. This will also launch the server
+    client.start();
+    
     //start the dotnet websockets server
     // const assemblyPath = "C:\\dev\\private\\Assertive\\Assertive.Server\\bin\\Release\\net8.0\\publish\\Assertive.Server.dll";
     // const cwd = "C:\\dev\\private\\Assertive\\Assertive.Server\\bin\\Release\\net8.0\\publish";
