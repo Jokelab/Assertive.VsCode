@@ -22,13 +22,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deactivate = exports.activate = void 0;
 const vscode = __importStar(require("vscode"));
-const ws_1 = __importDefault(require("ws"));
 const node_1 = require("vscode-languageclient/node");
 let client;
 function activate(context) {
@@ -49,20 +45,18 @@ function activate(context) {
     client = new node_1.LanguageClient('AssertiveLSP', 'Assertive Language Server', serverOptions, clientOptions);
     // Start the client. This will also launch the server
     client.start();
-    //start the dotnet websockets server
-    // const assemblyPath = "C:\\dev\\private\\Assertive\\Assertive.Server\\bin\\Release\\net8.0\\publish\\Assertive.Server.dll";
-    // const cwd = "C:\\dev\\private\\Assertive\\Assertive.Server\\bin\\Release\\net8.0\\publish";
-    // exec(`dotnet ${assemblyPath}`, { cwd }, (error, stdout, stderr) => {
-    //     if (error) {
-    //         vscode.window.showErrorMessage(`Error: ${error.message}`);
-    //         return;
-    //     }
-    //     if (stderr) {
-    //         vscode.window.showErrorMessage(`STDERR: ${stderr}`);
-    //         return;
-    //     }
-    //     vscode.window.showInformationMessage(`STDOUT: ${stdout}`);
-    // });
+    client.onNotification('assertive/RequestStart', (params) => {
+        const parsedData = JSON.parse(params);
+        if (panel) {
+            panel.webview.postMessage(parsedData);
+        }
+    });
+    client.onNotification('assertive/output', (params) => {
+        const parsedData = JSON.parse(params);
+        if (panel) {
+            panel.webview.postMessage(parsedData);
+        }
+    });
     let disposable = vscode.commands.registerCommand('extension.runAssertive', () => {
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
@@ -85,21 +79,8 @@ function activate(context) {
                 panel = undefined;
             }, null, context.subscriptions);
         }
-        // Connect to the WebSocket server
-        const ws = new ws_1.default('ws://localhost:5000/');
-        ws.on('open', () => {
-            console.log('Connected to Assertive WebSocket server');
-            ws.send(filePath); // Send the file path to the WebSocket server
-        });
-        ws.on('message', (data) => {
-            const parsedData = JSON.parse(data.toString());
-            if (panel) {
-                panel.webview.postMessage(parsedData);
-            }
-        });
-        ws.on('close', () => {
-            console.log('Disconnected from Assertive WebSocket server');
-        });
+        const interpreterRequest = { filePath: filePath };
+        client.sendNotification('assertive/interpreterRequest', interpreterRequest);
     });
     context.subscriptions.push(disposable);
     function getWebviewContent(scriptUri, cssUri) {

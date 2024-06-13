@@ -6,7 +6,6 @@ import {
     LanguageClientOptions,
     ServerOptions
 } from 'vscode-languageclient/node';
-import { exec } from 'child_process';
 
 let client: LanguageClient;
 
@@ -39,21 +38,21 @@ export function activate(context: vscode.ExtensionContext) {
 
     // Start the client. This will also launch the server
     client.start();
-    
-    //start the dotnet websockets server
-    // const assemblyPath = "C:\\dev\\private\\Assertive\\Assertive.Server\\bin\\Release\\net8.0\\publish\\Assertive.Server.dll";
-    // const cwd = "C:\\dev\\private\\Assertive\\Assertive.Server\\bin\\Release\\net8.0\\publish";
-    // exec(`dotnet ${assemblyPath}`, { cwd }, (error, stdout, stderr) => {
-    //     if (error) {
-    //         vscode.window.showErrorMessage(`Error: ${error.message}`);
-    //         return;
-    //     }
-    //     if (stderr) {
-    //         vscode.window.showErrorMessage(`STDERR: ${stderr}`);
-    //         return;
-    //     }
-    //     vscode.window.showInformationMessage(`STDOUT: ${stdout}`);
-    // });
+
+    client.onNotification('assertive/RequestStart', (params: string ) => {
+        const parsedData = JSON.parse(params);
+        if (panel) {
+            panel.webview.postMessage(parsedData);
+        }
+    });
+
+    client.onNotification('assertive/output', (params: string ) => {
+        const parsedData = JSON.parse(params);
+        if (panel) {
+            panel.webview.postMessage(parsedData);
+        }
+    });
+
 
     let disposable = vscode.commands.registerCommand('extension.runAssertive', () => {
         const editor = vscode.window.activeTextEditor;
@@ -89,23 +88,10 @@ export function activate(context: vscode.ExtensionContext) {
             }, null, context.subscriptions);
         }
 
-        // Connect to the WebSocket server
-        const ws = new WebSocket('ws://localhost:5000/');
-        ws.on('open', () => {
-            console.log('Connected to Assertive WebSocket server');
-            ws.send(filePath);  // Send the file path to the WebSocket server
-        });
+        const interpreterRequest: InterpretationRequest = { filePath: filePath };
+        client.sendNotification('assertive/interpreterRequest', interpreterRequest,);
 
-        ws.on('message', (data) => {
-            const parsedData = JSON.parse(data.toString());
-            if (panel) {
-                panel.webview.postMessage(parsedData);
-            }
-        });
 
-        ws.on('close', () => {
-            console.log('Disconnected from Assertive WebSocket server');
-        });
     });
 
     context.subscriptions.push(disposable);

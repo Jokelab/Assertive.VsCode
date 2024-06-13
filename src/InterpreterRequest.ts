@@ -1,0 +1,3 @@
+interface InterpretationRequest {
+    filePath: string;
+}

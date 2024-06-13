@@ -1,0 +1,31 @@
+{
+    "HTTP request textual body": {
+		"prefix": ["HTTP request", "GET", "POST"],
+		"body": [
+			"POST \"${0:https://hostname/path/}\"\nquery {\"a\":\"value_for_a\",\"b\":\"value_for_b\"}\nheaders {'my-header': 'header-value'}\nbody 'textual content';",
+			"$2"
+		],
+		"description": "HTTP request with all options"
+	},
+    "While loop": {
+		"prefix": "While loop",
+		"body": [
+			"while (${0:condition}){\n //do stuff\n$1\n}"
+		],
+		"description": "While loop with condition"
+	},
+	"Function definition": {
+		"prefix": "Function definition",
+		"body": [
+			"def addNumbers (x, y){\n return x + y; \n}"
+		],
+		"description": "Simple function definition"
+	},
+	"Function definition with description": {
+		"prefix": "Function definition with description",
+		"body": [
+			"def measure (x, y){\n GET \"https://hostname/api/v1/\" \n}"
+		],
+		"description": "Function definition with description, so it will measure start and end time."
+	}
+}

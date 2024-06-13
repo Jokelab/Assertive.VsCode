@@ -50,7 +50,13 @@
         "key": "ctrl+alt+a",
         "mac": "shift+cmd+a"
       }
-    ]
+    ],
+    "snippets": [
+			{
+				"language": "assertive",
+				"path": "./snippets.json"
+			}
+		]
   },
   "devDependencies": {
     "@types/node": "^12.11.7",
