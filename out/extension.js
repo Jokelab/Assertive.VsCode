@@ -51,7 +51,31 @@ function activate(context) {
             panel.webview.postMessage(parsedData);
         }
     });
+    client.onNotification('assertive/RequestEnd', (params) => {
+        const parsedData = JSON.parse(params);
+        if (panel) {
+            panel.webview.postMessage(parsedData);
+        }
+    });
     client.onNotification('assertive/output', (params) => {
+        const parsedData = JSON.parse(params);
+        if (panel) {
+            panel.webview.postMessage(parsedData);
+        }
+    });
+    client.onNotification('assertive/AnnotatedFunctionStart', (params) => {
+        const parsedData = JSON.parse(params);
+        if (panel) {
+            panel.webview.postMessage(parsedData);
+        }
+    });
+    client.onNotification('assertive/AnnotatedFunctionEnd', (params) => {
+        const parsedData = JSON.parse(params);
+        if (panel) {
+            panel.webview.postMessage(parsedData);
+        }
+    });
+    client.onNotification('assertive/Assertion', (params) => {
         const parsedData = JSON.parse(params);
         if (panel) {
             panel.webview.postMessage(parsedData);

@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-import WebSocket from 'ws';
 import * as path from 'path';
 import {
     LanguageClient,
@@ -46,7 +45,35 @@ export function activate(context: vscode.ExtensionContext) {
         }
     });
 
+    client.onNotification('assertive/RequestEnd', (params: string ) => {
+        const parsedData = JSON.parse(params);
+        if (panel) {
+            panel.webview.postMessage(parsedData);
+        }
+    });
+
     client.onNotification('assertive/output', (params: string ) => {
+        const parsedData = JSON.parse(params);
+        if (panel) {
+            panel.webview.postMessage(parsedData);
+        }
+    });
+
+    client.onNotification('assertive/AnnotatedFunctionStart', (params: string ) => {
+        const parsedData = JSON.parse(params);
+        if (panel) {
+            panel.webview.postMessage(parsedData);
+        }
+    });
+
+    client.onNotification('assertive/AnnotatedFunctionEnd', (params: string ) => {
+        const parsedData = JSON.parse(params);
+        if (panel) {
+            panel.webview.postMessage(parsedData);
+        }
+    });
+
+    client.onNotification('assertive/Assertion', (params: string ) => {
         const parsedData = JSON.parse(params);
         if (panel) {
             panel.webview.postMessage(parsedData);
@@ -117,3 +144,7 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 export function deactivate() { }
+
+interface InterpretationRequest {
+    filePath: string;
+}
