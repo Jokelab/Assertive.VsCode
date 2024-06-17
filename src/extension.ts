@@ -35,9 +35,6 @@ export function activate(context: vscode.ExtensionContext) {
         clientOptions
     );
 
-    // Start the client. This will also launch the server
-    client.start();
-
     client.onNotification('assertive/RequestStart', (params: string ) => {
         const parsedData = JSON.parse(params);
         if (panel) {
@@ -79,6 +76,14 @@ export function activate(context: vscode.ExtensionContext) {
             panel.webview.postMessage(parsedData);
         }
     });
+
+    client.onNotification('assertive/started', () => {
+        vscode.window.showInformationMessage(`Assertive Language Server Started`);
+    });
+
+
+    // Start the client. This will also launch the server
+    client.start();
 
 
     let disposable = vscode.commands.registerCommand('extension.runAssertive', () => {

@@ -43,6 +43,9 @@ function activate(context) {
     };
     // Create the language client and start the client.
     client = new node_1.LanguageClient('AssertiveLSP', 'Assertive Language Server', serverOptions, clientOptions);
+    client.onNotification('assertive/started', () => {
+        vscode.window.showInformationMessage(`Assertive Language server Started`);
+    });
     // Start the client. This will also launch the server
     client.start();
     client.onNotification('assertive/RequestStart', (params) => {
