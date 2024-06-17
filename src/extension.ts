@@ -101,7 +101,7 @@ export function activate(context: vscode.ExtensionContext) {
             panel = vscode.window.createWebviewPanel(
                 'assertiveInterpreterOutput',
                 'Assertive output',
-                vscode.ViewColumn.One,
+                vscode.ViewColumn.Three,
                 { enableScripts: true, retainContextWhenHidden: true }
             );
 

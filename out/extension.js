@@ -43,11 +43,6 @@ function activate(context) {
     };
     // Create the language client and start the client.
     client = new node_1.LanguageClient('AssertiveLSP', 'Assertive Language Server', serverOptions, clientOptions);
-    client.onNotification('assertive/started', () => {
-        vscode.window.showInformationMessage(`Assertive Language server Started`);
-    });
-    // Start the client. This will also launch the server
-    client.start();
     client.onNotification('assertive/RequestStart', (params) => {
         const parsedData = JSON.parse(params);
         if (panel) {
@@ -84,6 +79,11 @@ function activate(context) {
             panel.webview.postMessage(parsedData);
         }
     });
+    client.onNotification('assertive/started', () => {
+        vscode.window.showInformationMessage(`Assertive Language Server Started`);
+    });
+    // Start the client. This will also launch the server
+    client.start();
     let disposable = vscode.commands.registerCommand('extension.runAssertive', () => {
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
@@ -94,7 +94,7 @@ function activate(context) {
         const filePath = document.uri.fsPath;
         // Create the Webview panel if it doesn't exist
         if (!panel) {
-            panel = vscode.window.createWebviewPanel('assertiveInterpreterOutput', 'Assertive output', vscode.ViewColumn.One, { enableScripts: true, retainContextWhenHidden: true });
+            panel = vscode.window.createWebviewPanel('assertiveInterpreterOutput', 'Assertive output', vscode.ViewColumn.Three, { enableScripts: true, retainContextWhenHidden: true });
             // Get path to resource on disk
             const scriptOnDiskPath = vscode.Uri.joinPath(context.extensionUri, 'media', 'main.js');
             const cssOnDiskPath = vscode.Uri.joinPath(context.extensionUri, 'media', 'main.css');
