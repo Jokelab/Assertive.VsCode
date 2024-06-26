@@ -17,15 +17,9 @@
 	"Function definition": {
 		"prefix": "Function definition",
 		"body": [
-			"def addNumbers (x, y){\n return x + y; \n}"
+			"def addNumbers (\\$x, \\$y){\n return \\$x + \\$y; \n}"
 		],
 		"description": "Simple function definition"
-	},
-	"Function definition with description": {
-		"prefix": "Function definition with description",
-		"body": [
-			"def measure (x, y){\n GET \"https://hostname/api/v1/\" \n}"
-		],
-		"description": "Function definition with description, so it will measure start and end time."
 	}
+
 }
