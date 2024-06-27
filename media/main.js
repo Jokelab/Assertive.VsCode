@@ -37,7 +37,9 @@ window.addEventListener('message', event => {
             //function invocation
             const textDiv = document.createElement('div');
             let durationText = '';
-            if (data.Invocation == 'End') durationText = ' - ' + data.DurationMs + 'ms';
+            if (data.Invocation == 'End'){ 
+                durationText = ' - #' + data.TotalRequests + ' Total: ' + data.TotalRequestDurationMs + 'ms. Avg: ' + data.AvgRequestDurationMs + 'ms. Function: ' + data.TotalDurationMs + 'ms.';
+            }
             
             textDiv.innerHTML = '<h4>[' + data.Invocation + '] '+ data.FunctionName +  ' (' + data.Annotation + durationText + ')</h4>'
             outputContainer.appendChild(textDiv);
