@@ -11,8 +11,6 @@ let client: LanguageClient;
 export function activate(context: vscode.ExtensionContext) {
     let panel: vscode.WebviewPanel | undefined;
 
-    vscode.window.showInformationMessage(`Activating Assertive extension`);
-
     const serverExecutable = 'dotnet'; // assumes `dotnet` is in PATH
     const serverPath = 'C:\\dev\\private\\Assertive\\Assertive.LanguageServer\\bin\\Debug\\net8.0\\Assertive.LanguageServer.dll';//context.asAbsolutePath(path.join('server', 'bin', 'Debug', 'net6.0', 'LspServer.dll'));
 
@@ -35,50 +33,20 @@ export function activate(context: vscode.ExtensionContext) {
         clientOptions
     );
 
-    client.onNotification('assertive/RequestStart', (params: string ) => {
-        const parsedData = JSON.parse(params);
-        if (panel) {
-            panel.webview.postMessage(parsedData);
-        }
-    });
+    client.onNotification('assertive/RequestStart',processNotification);
 
-    client.onNotification('assertive/RequestEnd', (params: string ) => {
-        const parsedData = JSON.parse(params);
-        if (panel) {
-            panel.webview.postMessage(parsedData);
-        }
-    });
+    client.onNotification('assertive/RequestEnd', processNotification);
 
-    client.onNotification('assertive/output', (params: string ) => {
-        const parsedData = JSON.parse(params);
-        if (panel) {
-            panel.webview.postMessage(parsedData);
-        }
-    });
+    client.onNotification('assertive/output', processNotification);
 
-    client.onNotification('assertive/AnnotatedFunctionStart', (params: string ) => {
-        const parsedData = JSON.parse(params);
-        if (panel) {
-            panel.webview.postMessage(parsedData);
-        }
-    });
+    client.onNotification('assertive/AnnotatedFunctionStart',  processNotification);
 
-    client.onNotification('assertive/AnnotatedFunctionEnd', (params: string ) => {
-        const parsedData = JSON.parse(params);
-        if (panel) {
-            panel.webview.postMessage(parsedData);
-        }
-    });
+    client.onNotification('assertive/AnnotatedFunctionEnd', processNotification);
 
-    client.onNotification('assertive/Assertion', (params: string ) => {
-        const parsedData = JSON.parse(params);
-        if (panel) {
-            panel.webview.postMessage(parsedData);
-        }
-    });
+    client.onNotification('assertive/Assertion', processNotification);
 
     client.onNotification('assertive/started', () => {
-        vscode.window.showInformationMessage(`Assertive Language Server Started`);
+        vscode.window.showInformationMessage(`Assertive Language Server started`);
     });
 
 
@@ -120,7 +88,7 @@ export function activate(context: vscode.ExtensionContext) {
             }, null, context.subscriptions);
         }
 
-        const interpreterRequest: InterpretationRequest = { filePath: filePath };
+        const interpreterRequest: InterpreterRequest = { filePath: filePath };
         client.sendNotification('assertive/interpreterRequest', interpreterRequest,);
 
 
@@ -146,10 +114,17 @@ export function activate(context: vscode.ExtensionContext) {
             </html>
         `;
     }
+
+    function processNotification(content: string): void{
+        const parsedData = JSON.parse(content);
+        if (panel) {
+            panel.webview.postMessage(parsedData);
+        }
+    }
 }
 
 export function deactivate() { }
 
-interface InterpretationRequest {
+interface InterpreterRequest {
     filePath: string;
 }

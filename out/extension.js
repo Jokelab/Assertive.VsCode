@@ -29,7 +29,6 @@ const node_1 = require("vscode-languageclient/node");
 let client;
 function activate(context) {
     let panel;
-    vscode.window.showInformationMessage(`Activating Assertive extension`);
     const serverExecutable = 'dotnet'; // assumes `dotnet` is in PATH
     const serverPath = 'C:\\dev\\private\\Assertive\\Assertive.LanguageServer\\bin\\Debug\\net8.0\\Assertive.LanguageServer.dll'; //context.asAbsolutePath(path.join('server', 'bin', 'Debug', 'net6.0', 'LspServer.dll'));
     // Server options
@@ -43,44 +42,14 @@ function activate(context) {
     };
     // Create the language client and start the client.
     client = new node_1.LanguageClient('AssertiveLSP', 'Assertive Language Server', serverOptions, clientOptions);
-    client.onNotification('assertive/RequestStart', (params) => {
-        const parsedData = JSON.parse(params);
-        if (panel) {
-            panel.webview.postMessage(parsedData);
-        }
-    });
-    client.onNotification('assertive/RequestEnd', (params) => {
-        const parsedData = JSON.parse(params);
-        if (panel) {
-            panel.webview.postMessage(parsedData);
-        }
-    });
-    client.onNotification('assertive/output', (params) => {
-        const parsedData = JSON.parse(params);
-        if (panel) {
-            panel.webview.postMessage(parsedData);
-        }
-    });
-    client.onNotification('assertive/AnnotatedFunctionStart', (params) => {
-        const parsedData = JSON.parse(params);
-        if (panel) {
-            panel.webview.postMessage(parsedData);
-        }
-    });
-    client.onNotification('assertive/AnnotatedFunctionEnd', (params) => {
-        const parsedData = JSON.parse(params);
-        if (panel) {
-            panel.webview.postMessage(parsedData);
-        }
-    });
-    client.onNotification('assertive/Assertion', (params) => {
-        const parsedData = JSON.parse(params);
-        if (panel) {
-            panel.webview.postMessage(parsedData);
-        }
-    });
+    client.onNotification('assertive/RequestStart', processNotification);
+    client.onNotification('assertive/RequestEnd', processNotification);
+    client.onNotification('assertive/output', processNotification);
+    client.onNotification('assertive/AnnotatedFunctionStart', processNotification);
+    client.onNotification('assertive/AnnotatedFunctionEnd', processNotification);
+    client.onNotification('assertive/Assertion', processNotification);
     client.onNotification('assertive/started', () => {
-        vscode.window.showInformationMessage(`Assertive Language Server Started`);
+        vscode.window.showInformationMessage(`Assertive Language Server started`);
     });
     // Start the client. This will also launch the server
     client.start();
@@ -127,6 +96,12 @@ function activate(context) {
             </body>
             </html>
         `;
+    }
+    function processNotification(content) {
+        const parsedData = JSON.parse(content);
+        if (panel) {
+            panel.webview.postMessage(parsedData);
+        }
     }
 }
 exports.activate = activate;
