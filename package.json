@@ -1,7 +1,8 @@
 {
   "name": "assertive",
   "displayName": "Assertive",
-  "description": "Assertive HTTP DSL",
+  "description": "Assertive scripting language for HTTP request testing",
+  "publisher": "Robert Beisicht",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.88.0"
@@ -41,7 +42,7 @@
     "commands": [
       {
         "command": "extension.runAssertive",
-        "title": "Run Assertive"
+        "title": "Assertive: Run script"
       }
     ],
     "keybindings": [
@@ -69,5 +70,13 @@
   "dependencies": {
     "ws": "^8.0.0",
        "vscode-languageclient": "^8.0.2"
-  }
+  },
+  "extensionDependencies":[
+    "ms-dotnettools.vscode-dotnet-runtime"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Jokelab/Assertive.VsCode.git"
+  },
+  "homepage": "https://www.assertivescript.com"
 }
