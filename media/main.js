@@ -10,7 +10,7 @@ window.addEventListener('message', event => {
         if (requestPanel != null) {
 
             //element already exists, so response received.
-            requestPanel.innerHTML += '<h3>Response (' + data.DurationMs + ')</h3><pre>' + JSON.stringify(data.Response, null, 2) + '</pre>';
+            requestPanel.innerHTML += `<h3>Response ( ${data.DurationMs} )</h3><div><h4>Headers</h4>${getHeaders(data.Response)}</div>`;
             requestButton.innerHTML += '<span class="right-text">' + data.Response.StatusCode +  '(' +  data.Response.ReasonPhrase + ') ' + data.DurationMs + 'ms</span>';
         }
         else {
@@ -26,7 +26,7 @@ window.addEventListener('message', event => {
             requestPanel = document.createElement('div');
             requestPanel.setAttribute('id', requestPanelId);
             requestPanel.className = 'panel';
-            requestPanel.innerHTML = '<h3>Request:</h3><pre>' + JSON.stringify(data.Request, null, 2) + '</pre>';
+            requestPanel.innerHTML = `<h3>Request:</h3><div><h4>Headers</h4>${getHeaders(data.Request)}</div>`;
             outputContainer.appendChild(requestPanel);
 
         }
@@ -73,4 +73,15 @@ function accordionButtonClick(button, panelId) {
     } else {
         panel.style.maxHeight = panel.scrollHeight + "px";
     }
+}
+
+function getHeaders(data){
+    var headers = "<table><th>Key</th><th>Value</th>";
+
+    for(var i=0; i< data.Headers.length; i++){
+        const header = data.Headers[i];
+        headers += `<tr><td>${header.Key}</td><td>${header.Value}</td></tr>`;
+    }
+    headers += '</table>';
+    return headers;
 }

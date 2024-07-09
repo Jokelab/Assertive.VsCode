@@ -25,14 +25,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deactivate = exports.activate = void 0;
 const vscode = __importStar(require("vscode"));
-const path = __importStar(require("path"));
 const node_1 = require("vscode-languageclient/node");
 let client;
 function activate(context) {
     let panel;
     const serverExecutable = 'dotnet'; // assumes `dotnet` is in PATH
-    //const serverPath = 'C:\\dev\\private\\Assertive\\Assertive.LanguageServer\\bin\\Debug\\net8.0\\Assertive.LanguageServer.dll';
-    const serverPath = context.asAbsolutePath(path.join('server', 'Assertive.LanguageServer.dll'));
+    const serverPath = 'C:\\dev\\private\\Assertive\\Assertive.LanguageServer\\bin\\Debug\\net8.0\\Assertive.LanguageServer.dll';
+    //const serverPath = context.asAbsolutePath(path.join('server', 'Assertive.LanguageServer.dll'));
     // Server options
     const serverOptions = {
         run: { command: serverExecutable, args: [serverPath] },

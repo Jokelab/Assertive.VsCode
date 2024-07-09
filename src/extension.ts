@@ -12,8 +12,8 @@ export function activate(context: vscode.ExtensionContext) {
     let panel: vscode.WebviewPanel | undefined;
 
     const serverExecutable = 'dotnet'; // assumes `dotnet` is in PATH
-    //const serverPath = 'C:\\dev\\private\\Assertive\\Assertive.LanguageServer\\bin\\Debug\\net8.0\\Assertive.LanguageServer.dll';
-    const serverPath = context.asAbsolutePath(path.join('server', 'Assertive.LanguageServer.dll'));
+    const serverPath = 'C:\\dev\\private\\Assertive\\Assertive.LanguageServer\\bin\\Debug\\net8.0\\Assertive.LanguageServer.dll';
+    //const serverPath = context.asAbsolutePath(path.join('server', 'Assertive.LanguageServer.dll'));
 
     // Server options
     const serverOptions: ServerOptions = {
