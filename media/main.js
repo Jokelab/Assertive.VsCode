@@ -10,8 +10,8 @@ window.addEventListener('message', event => {
         if (requestPanel != null) {
 
             //element already exists, so response received.
-            requestPanel.innerHTML += `<h3>Response ( ${data.DurationMs} )</h3><div><h4>Headers</h4>${getHeaders(data.Response)}</div>`;
-            requestButton.innerHTML += '<span class="right-text">' + data.Response.StatusCode +  '(' +  data.Response.ReasonPhrase + ') ' + data.DurationMs + 'ms</span>';
+            requestPanel.innerHTML += `<hr><h3>Response ${getResponseStatusString(data)}</h3><div><h4>Headers</h4>${getHeaders(data.Response)}</div>`;
+            requestButton.innerHTML += `<span class="right-text">${getResponseStatusString(data)} ${data.DurationMs} ms</span>`;
         }
         else {
             //accordion button
@@ -26,7 +26,7 @@ window.addEventListener('message', event => {
             requestPanel = document.createElement('div');
             requestPanel.setAttribute('id', requestPanelId);
             requestPanel.className = 'panel';
-            requestPanel.innerHTML = `<h3>Request:</h3><div><h4>Headers</h4>${getHeaders(data.Request)}</div>`;
+            requestPanel.innerHTML = `<h3>Request</h3><div><h4>Headers</h4>${getHeaders(data.Request)}</div>`;
             outputContainer.appendChild(requestPanel);
 
         }
@@ -57,7 +57,7 @@ window.addEventListener('message', event => {
     else {
         //text output
         const textDiv = document.createElement('div');
-        textDiv.innerHTML = '<h4>' + JSON.stringify(data, null, 2) + '</h4>'
+        textDiv.innerHTML = '<h4>' + data + '</h4>'
         outputContainer.appendChild(textDiv);
 
     }
@@ -76,12 +76,17 @@ function accordionButtonClick(button, panelId) {
 }
 
 function getHeaders(data){
-    var headers = "<table><th>Key</th><th>Value</th>";
+    var headers = "<table><th class='col-key'>Key</th><th class='col-value'>Value</th>";
 
     for(var i=0; i< data.Headers.length; i++){
         const header = data.Headers[i];
-        headers += `<tr><td>${header.Key}</td><td>${header.Value}</td></tr>`;
+        headers += `<tr><td class='col-key'>${header.Key}</td><td class='col-value'>${header.Value}</td></tr>`;
     }
     headers += '</table>';
     return headers;
+}
+
+function getResponseStatusString(data)
+{
+    return data.Response.StatusCode +  '(' +  data.Response.ReasonPhrase + ') ';
 }

@@ -52,3 +52,16 @@
 .failed{
   color: #F00;
 }
+
+th, td{
+  padding: 4px;
+  white-space: nowrap;
+  text-align: left;
+}
+.col-key{
+  width: 25%;
+}
+
+.col-value{
+  width: 75%;
+}
